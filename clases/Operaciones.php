@@ -73,23 +73,26 @@
          * @param       texto       Un texto que representa una ruta a listar.
          * @return      texto       Representa un html con la lista de carpetas y archvos en un nivel.
          */
-        function listar_contenido( $ruta )
+        function listar_contenido( $ruta, $des = null )
         {
             $salida = "";
             $directorio = opendir( $ruta ); //ruta actual
+            $entrar = false;
+            //rsort( $directorio );
             
             while ( false != ( $archivo = readdir( $directorio ) ) ) //obtenemos un archivo y luego otro sucesivamente
             {
-                
                 if( $archivo != "." && $archivo != ".." && strpos( $archivo, ".php" ) === false ) //Omitimos el retroceso y phps.
                 {                
-                    if ( is_dir( $ruta."/".$archivo )) //verificamos si es o no un directorio
+                    if ( is_dir( $ruta."/".$archivo ) ) //verificamos si es o no un directorio
                     {
                         //$salida .= "[".$archivo . "]<br />"; //de ser un directorio lo envolvemos entre corchetes
+                        if( $des == "carpetas" || $des == null )
                         $salida .= $this->convertir_enlace_o_no( $ruta, $archivo, "v_listado.php" ) . "<br />";
                         
                     }else{
                             //$salida .= $archivo . "<br />";
+                            if( $des == "archivos" || $des == null )
                             $salida .= $this->convertir_enlace_o_no( $ruta, $archivo ) . "<br />";
                         }                        
                 }
