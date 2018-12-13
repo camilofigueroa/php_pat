@@ -73,7 +73,7 @@
                 
             }
             
-            //echo $salida;
+            //echo "<br>Salida = ".$salida."<br>";
             
             $conexion->close();
             

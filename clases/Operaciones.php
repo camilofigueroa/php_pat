@@ -11,6 +11,7 @@
     class Operaciones extends datos
     {        
         public $g_sitio_exterior = 0; //Variable para almacenar si las carpetas de patrocinio estarán interna o externamente.
+        public $g_carpeta_nivel = ""; //Para almacenar la carpeta del nivel.
         
         /**
          * Constructor de la clase.
@@ -18,6 +19,9 @@
          */
         public function Operaciones()
         {
+            if( !isset( $_SESSION ) ) session_start();
+            echo $_SESSION[ 'nivel' ]." -> ";
+            
             $this->ini();
         }        
         
@@ -149,60 +153,59 @@
                     }else{
                             $tmp_ruta = $this->encrypt_decrypt( 'encrypt', $ruta."/".$dato ); //13/12/2018
                             $salida .= "<a href='$destino?destino=$tmp_ruta' target='_self'>".$dato."</a>";
-                        }
-                    
-                }
-            
+                        }                    
+                }            
                     
             return $salida;
         }
         
         /**
          * Esta función se encarga de armar el control migas de pan para que un usuario se pueda devolver a un anterior directorio.
-         * Aquí sí se debe extraer el directorio raiz, para ue le usuario no lo identifique en el sitio.
+         * Aquí sí se debe extraer el directorio raiz, para que el usuario no lo identifique en el sitio.
          * @param       texto           Un texto que representa la ruta en la cual a entrado el usuario.
          * @return      texto           Un texto que representa un html con el control migas de pan.
          */
         function armar_migas_de_pan( $ruta )
         {
+            $ruta = $this->arreglar_ruta( TRIM( $ruta ) );
             $salida = "";
             $tmp_ruta = "";
+            $nivel = $_SESSION[ 'nivel' ];
+            $carpeta_nivel = $this->arreglar_ruta( TRIM( $this->ajustar_carpeta_nivel( $nivel ) ) );
             //$arreglo2 = [];
             
-            $ruta = str_replace( "//", "/", $ruta ); //Se arregla un poco la ruta.
-            
+            //echo "<br>".$ruta."  1<br>";
             //Cuando la ruta es exterior a la carpeta, se tratará un poco diferente.
-            if( $this->g_sitio_exterior == 1 ) $ruta = str_replace( $this->retornar_carpeta_principal(), "", $ruta ); 
-            //echo $ruta."<br>";
-            
-            if( strpos( $ruta, "/" ) !== false ) //Si se encuentra la diagonal, la carpeta está compuesta.
+            if( $this->g_sitio_exterior == 1 )
             {
-                //Se arregla la ruta porque el último carater de diagonal daña la interpretación de estructuras de directorios.
-                if( TRIM( substr( $ruta, strlen( $ruta ) - 1 ) ) == "/" ) $ruta = substr( $ruta, 0, strlen( $ruta ) - 1 );
-                
-                $arreglo = explode( "/", $ruta );
-                
-                for( $i = 0; $i < count( $arreglo ); $i ++ )
-                {
-                    if( $arreglo[ $i ] != "" )
-                    {
-                        $tmp_ruta .= $arreglo[ $i ]."/";
+                //echo "<br><strong>".$this->retornar_carpeta_principal()."/".$carpeta_nivel."</strong><br>";
+                $ruta = str_replace( $this->retornar_carpeta_principal()."/".$carpeta_nivel, "", $ruta );
+            }
+            
+            $ruta = $this->arreglar_ruta( $ruta ); //Se quitan diagonales iniciales, finales y dobles.
+            //echo "<br>".$ruta."  2<br>";
                         
-                        //Si la carpeta con el contenido estpa fuera del sitio, hay que tener cuidado con las rutas.
-                        if( $this->g_sitio_exterior == 1 )
-                        {
-                            //Si la ruta de la miga de pan no contiene la carpeta principal, hay que agregársela.
-                            if( strpos( $tmp_ruta, $this->retornar_carpeta_principal() ) === false )
-                            $tmp_ruta = $this->retornar_carpeta_principal()."/".$tmp_ruta;
-                        }
+            if( TRIM( $ruta ) != "" )
+            {                
+                if( $ruta != $carpeta_nivel ) //Quita el problema de que al entrar en un nivel, deja devuelta para el que lo contiene.
+                {                       
+                    $arreglo = explode( "/", $ruta );
+                    print_r( $arreglo );
                     
-                        if( $i > 0 && $i < count( $arreglo ) - 1 )
-                        {
-                            //$arreglo2[ $i ] = $salida;
-                            //echo $tmp_ruta."<br>";
-                            $salida .= $this->convertir_enlace_o_no( $tmp_ruta, null, "v_listado.php", $tmp_ruta )."<br/>";    
-                        }   
+                    //Si la carpeta con el contenido está fuera del sitio, hay que tener cuidado con las rutas.
+                    if( $this->g_sitio_exterior == 1 )
+                    {
+                        //Si la ruta de la miga de pan no contiene la carpeta principal, hay que agregársela.
+                        if( strpos( $tmp_ruta, $this->retornar_carpeta_principal()."/".$carpeta_nivel ) === false )
+                        $tmp_ruta = $this->retornar_carpeta_principal()."/".$carpeta_nivel."/".$tmp_ruta;
                     }                    
+                    
+                    //Aquí empiezan a armarse los diferentes enlaces de las migas de pan.
+                    for( $i = 0; $i < count( $arreglo ); $i ++ )
+                    {
+                        if( $i - 1 >= 0 ) $tmp_ruta .= $arreglo[ $i - 1 ]."/";                        
+                        $salida .= $this->convertir_enlace_o_no( $tmp_ruta, null, "v_listado.php", $tmp_ruta )."<br/>";                        
+                    }
                 }
             }
             
@@ -216,6 +219,8 @@
         
         /**
          * Convierte un número que representa un nivel a su respectiva carpeta.
+         * Este nivel proviene de la escogencia de la lista en el login.
+         * También almacena esa carpeta en una variable global.
          * @param       Número       Número que representa un nivel.
          * @return      Texto        Texto que representa una carpeta del sistema.
          */
@@ -223,8 +228,12 @@
         {
             //Hay que trabajar las diferentes rutas que puede tener, superiores al nivel seleccionado.
             //No es suficiente con traer la carpeta porque físicamente hay contenencia de carpetas.
+        
+            $this->g_carpeta_nivel = $this->retornar_datos( "prm_claves", "carpeta_nivel", " nivel >= ".$nivel, " nivel DESC ", 2 );
+
+            //echo $this->g_carpeta_nivel."______<br>";
             
-            return $this->retornar_datos( "prm_claves", "carpeta_nivel", " nivel >= ".$nivel, " nivel DESC ", 2 );
+            return $this->g_carpeta_nivel;
         }        
         
         /**
@@ -256,7 +265,7 @@
         }
         
         /**
-		 * La siguiente función se encarga de escribir algun dato en un archivo de texto, puede servir para escribir un log o un listado
+		 * La siguiente función se encarga de escribir algun d ato en un archivo de texto, puede servir para escribir un log o un listado
 		 * de errores.
 		 * @param  			texto  				Una cadena que será escrita en un archivo de texto.
 		 * @param 			texto 				Nombre de un archivo que será creado en la carpeta actual.
@@ -272,5 +281,34 @@
             fclose( $archivo );	
 			
 		}
+        
+        /**
+         * Retorna el título de la aplicación desde el archivo config.
+         * @return      texto       El título de la aplicación.
+         */
+        function retornar_titulo_app()
+        {
+            include( "config.php" );
+            return $titulo_aplicacion;
+        }
 		
+        /**
+         * Quita primera diagonal, última, y otras cosas que se tienen planeadas.
+         * Se usa principalmente para arreglar las migas de pan.
+         * @param       texto       Ruta de una determinada carpeta.
+         * @return      texto       La ruta arreglada.
+         */
+        function arreglar_ruta( $ruta )
+        {
+            $ruta = str_replace( "//", "/", $ruta ); //Se arregla un poco la ruta.
+            
+            //Si el primer caracter es diagoal, se quitará pues también afecta el explode.
+            if( substr( $ruta, 0, 1 ) == "/" ) $ruta = substr( $ruta, 1 );
+            
+            //Se arregla la ruta porque el último caracter de diagonal daña la interpretación de estructuras de directorios.
+            if( TRIM( substr( $ruta, strlen( $ruta ) - 1 ) ) == "/" ) $ruta = substr( $ruta, 0, strlen( $ruta ) - 1 );
+            
+            return $ruta;
+        }
+        
     }

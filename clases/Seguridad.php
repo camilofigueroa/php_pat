@@ -32,7 +32,7 @@
          * @param           texto           Una ruta que ayudará a usar el archivo de config, donde se encuentre.
          */
         public function ini( $ruta = null )
-        {
+        {            
             include( $ruta."config.php" );
             $this->secret_key = $secret_key;
             $this->secret_iv = $secret_iv;
@@ -56,10 +56,10 @@
          */
         public function encriptar_aes( $cadena )
         {
-            //$salida = $cadena;
+            $salida = $cadena;
             
-            $salida = $this->obj_aes->encrypt( $cadena );
-            $salida = $this->convertir_cad_ascii( $salida );
+            //$salida = $this->obj_aes->encrypt( $cadena );
+            //$salida = $this->convertir_cad_ascii( $salida );
             
             return $salida;
         }
@@ -70,9 +70,11 @@
          * @return      texto           Una cadena desencriptada.
          */
         public function desencriptar_aes( $cadena )
-        {            
-            $salida = $this->convertir_ascii_cad( $cadena, 3 );
-            $salida = $this->obj_aes->decrypt( $salida );
+        {
+            $salida = $cadena;
+            
+            //$salida = $this->convertir_ascii_cad( $cadena, 3 );
+            //$salida = $this->obj_aes->decrypt( $salida );
             
             return $salida;
         }
@@ -101,18 +103,25 @@
            // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
            $iv = substr(hash('sha256', $secret_iv), 0, 16);
         
-           if ( $action == 'encrypt' ) {
+           if ( $action == 'encrypt' )
+           {
                $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
                $output = base64_encode($output);
+               
            } else if( $action == 'decrypt' ) {
-               $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
-           }
+            
+                    $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+                }
         
            return $output;
+           
+           //return $string;
         }
         
         /**
          * Convierte una cadena de caracteres a su correspondiente representacion ascii.
+         * @param       texto       Una cadena que será convertida a ASCII.
+         * @param       texto       Una cadena que representa un separador para cortar el texto principal.
          * @return      texto       Una cadena convertida a ascii.
          */
         public function convertir_cad_ascii( $cadena, $separador = null )
