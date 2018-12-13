@@ -10,6 +10,9 @@
      
     class Operaciones extends datos
     {
+        
+        public $g_sitio_exterior = 0; //Variable para almacenar si las carpetas de patrocinio estarán interna o externamente.
+        
         /**
          * Constructor de la clase.
          *
@@ -54,6 +57,8 @@
         /**
          * Esta función se encarga de organizar un contenido de un vector retornando salidas html.
          * Está incompleta o sin usar.
+         * @param
+         * @return      
          */
         function organizar( $datos ) 
         {
@@ -71,12 +76,24 @@
         /**
          * Este código es de http://www.elcodigofuente.com/leer-archivos-directorio-carpeta-php-812/
          * @param       texto       Un texto que representa una ruta a listar.
+         * @param       texto       Un texto que indica si se desea la impresión de archivos o carpetas.
+         * @param       texto       Un texto que indica si se desan algunas opciones de impresión.
          * @return      texto       Representa un html con la lista de carpetas y archvos en un nivel.
          */
-        function listar_contenido( $ruta, $des = null )
+        function listar_contenido( $ruta, $des = null, $imp_migas = null )
         {
             $salida = "";
             $directorio = opendir( $ruta ); //ruta actual
+            $migas_pan = "";
+            
+            if( strpos( $ruta, "../" ) !== false ) $this->g_sitio_exterior = 1;
+            
+            if( isset( $_SESSION[ 'ruta' ] ) )
+            {
+                $_SESSION[ 'ruta' ] = $ruta;
+                $migas_pan = $this->armar_migas_de_pan( $ruta ); //Arma la ruta para devolverse.
+            }
+            
             $entrar = false;
             //rsort( $directorio );
             
@@ -93,12 +110,14 @@
                     }else{
                             //$salida .= $archivo . "<br />";
                             if( $des == "archivos" || $des == null )
-                            $salida .= $this->convertir_enlace_o_no( $ruta, $archivo ) . "<br />";
+                            $salida .= $this->convertir_enlace_o_no( $ruta, $archivo )."<br />";                            
                         }                        
                 }
             }
             
-            closedir( $directorio );
+            closedir( $directorio );            
+            
+            if( $imp_migas != null ) $salida = $migas_pan.$salida;
             
             return $salida;
         }
@@ -112,18 +131,90 @@
          * @param       texto       Ruta que representa el nombre del archivo al cual debe ir para listar la carpeta.
          * @return      texto       Texto que representa un enlace html para ser puesto en pantalla.
          */
-        function convertir_enlace_o_no( $ruta, $dato, $destino = null )
+        function convertir_enlace_o_no( $ruta, $dato, $destino = null, $etiqueta = null )
         {
             if( $destino == null )
             {
-                $salida = "<a href='".$ruta."/".$dato."' target='_blank'>".$dato."</a>";                     
+                //Es archivo.
+                $salida = "<a href='".$ruta."/".$dato."' target='_blank'><img src='img/".$this->retornar_tipo_archivo( $dato )."'></a>";
+                $salida .= "<a href='".$ruta."/".$dato."' target='_blank'>".$dato."</a>";
                 
             }else{
-                    $salida = "<a href='$destino?destino=$ruta/$dato' target='_self'>[".$dato."]</a>";
+                    //Es carpeta.
+                    
+                    $salida = "<a href='$destino?destino=$ruta' target='_self'><img src='img/carpeta.jpg'></a>";
+                    
+                    if( $dato == null )
+                    {
+                        //Esta es para las Migas de Pan.
+                        //$salida = "<a href='$destino?destino=$ruta' target='_self'>".$etiqueta."</a>";
+                        $salida = "<a href='$destino?destino=$ruta' target='_self'><img src='img/volver.png'></a>";
+                        
+                    }else{
+                            $salida .= "<a href='$destino?destino=$ruta/$dato' target='_self'>".$dato."</a>";
+                        }
+                    
                 }
             
                     
             return $salida;
+        }
+        
+        /**
+         * Esta función se encarga de armar el control migas de pan para que un usuario se pueda devolver a un anterior directorio.
+         * Aquí sí se debe extraer el directorio raiz, para ue le usuario no lo identifique en el sitio.
+         * @param       texto           Un texto que representa la ruta en la cual a entrado el usuario.
+         * @return      texto           Un texto que representa un html con el control migas de pan.
+         */
+        function armar_migas_de_pan( $ruta )
+        {
+            $salida = "";
+            $tmp_ruta = "";
+            //$arreglo2 = [];
+            
+            $ruta = str_replace( "//", "/", $ruta ); //Se arregla un poco la ruta.
+            
+            //Cuando la ruta es exterior a la carpeta, se tratará un poco diferente.
+            if( $this->g_sitio_exterior == 1 ) $ruta = str_replace( $this->retornar_carpeta_principal(), "", $ruta ); 
+            //echo $ruta."<br>";
+            
+            if( strpos( $ruta, "/" ) !== false ) //Si se encuentra la diagonal, la carpeta está compuesta.
+            {
+                //Se arregla la ruta porque el último carater de diagonal daña la interpretación de estructuras de directorios.
+                if( TRIM( substr( $ruta, strlen( $ruta ) - 1 ) ) == "/" ) $ruta = substr( $ruta, 0, strlen( $ruta ) - 1 );
+                
+                $arreglo = explode( "/", $ruta );
+                
+                for( $i = 0; $i < count( $arreglo ); $i ++ )
+                {
+                    if( $arreglo[ $i ] != "" )
+                    {
+                        $tmp_ruta .= $arreglo[ $i ]."/";
+                        
+                        //Si la carpeta con el contenido estpa fuera del sitio, hay que tener cuidado con las rutas.
+                        if( $this->g_sitio_exterior == 1 )
+                        {
+                            //Si la ruta de la miga de pan no contiene la carpeta principal, hay que agregársela.
+                            if( strpos( $tmp_ruta, $this->retornar_carpeta_principal() ) === false )
+                            $tmp_ruta = $this->retornar_carpeta_principal()."/".$tmp_ruta;
+                        }
+                    
+                        if( $i > 0 && $i < count( $arreglo ) - 1 )
+                        {
+                            //$arreglo2[ $i ] = $salida;
+                            //echo $tmp_ruta."<br>";
+                            $salida .= $this->convertir_enlace_o_no( $tmp_ruta, null, "v_listado.php", $tmp_ruta )."<br/>";    
+                        }   
+                    }                    
+                }
+            }
+            
+            //echo $salida."<br>";
+            //print_r( $arreglo2 );
+            //echo "<hr>";
+                        
+            return $salida;
+            //return "";
         }
         
         /**
@@ -146,6 +237,25 @@
          */
         function retornar_carpeta_principal()
         {
-            return "usuarios";
+            include( "config.php" );
+            
+            return $ruta_general;
+        }
+        
+        /**
+         * Retorna el nombre de una imagen según el tipo de archivo que le llegue como parámetro.
+         * @param       texto       Nombre de un archivo para ser analizado.
+         * @return      texto       El nombre del tipo de archivo o imagen de tipo de archivo.
+         */
+        function retornar_tipo_archivo( $nombre )
+        {            
+            $salida = "archivo.jpg";
+            $nombre = strtolower( $nombre );
+            
+            if( strpos( $nombre, ".mp4" ) !== false )       $salida = "video.jpg";
+            if( strpos( $nombre, ".flv" ) !== false )       $salida = "video.jpg";
+            if( strpos( $nombre, ".wmv" ) !== false )       $salida = "video.jpg";
+            
+            return $salida;
         }
     }

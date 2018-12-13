@@ -18,8 +18,11 @@
          *
          */
         function retornar_conexion()
-        {            
-            return  mysqli_connect( "localhost", "root", "camilof1234", "bd_php_pat" ); 
+        {
+            include( "config.php" );
+            
+            //return  mysqli_connect( "localhost", "root", "camilof1234", "bd_php_pat" );
+            return  mysqli_connect( $servidor, $usuario, $clave, $bd ); 
         }
         
         /**
@@ -27,7 +30,7 @@
          * @param       texto           Representa una tabla específica del sistema.
          * @param       texto           Representa una columna, cálculo o dato a retornar.
          * @param       texto           Representa una condición para el sql.
-         * @param       texto           Representa uel order by.
+         * @param       texto           Representa el order by.
          * @param       texto           Representa un parámetro que retornará una ruta, un dato u otras cosa.
          * @return      texto           Un dato( s ) específico del sistema.
          */

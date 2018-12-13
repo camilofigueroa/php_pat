@@ -40,6 +40,8 @@
 <html lang="en">
     <head>
         
+        <?php include( "analytics.php" ); ?>
+        
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -68,8 +70,10 @@
                     
                     if( TRIM( $destino ) == "" ) $destino = $obj_operaciones->retornar_carpeta_principal().$obj_operaciones->ajustar_carpeta_nivel( $nivel );
                     
+                    //echo $destino;
+                    
                     //echo $obj_operaciones->listar_contenido( $destino );
-                    echo $obj_operaciones->listar_contenido( $destino, "carpetas" );
+                    echo $obj_operaciones->listar_contenido( $destino, "carpetas", 1 );
                     echo $obj_operaciones->listar_contenido( $destino, "archivos" );
                     
                     echo "<br>";               
@@ -82,6 +86,8 @@
             ?>
         
         </div> <!-- container -->
+        
+        <hr>
         
         <footer class="container">
             <p>&copy; Company 2017-2018</p>
