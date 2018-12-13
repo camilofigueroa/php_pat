@@ -9,8 +9,7 @@
     include( "clases/Datos.php" );
      
     class Operaciones extends datos
-    {
-        
+    {        
         public $g_sitio_exterior = 0; //Variable para almacenar si las carpetas de patrocinio estarán interna o externamente.
         
         /**
@@ -19,9 +18,8 @@
          */
         public function Operaciones()
         {
-            
-        }
-        
+            $this->ini();
+        }        
         
         /**
          * Esta función se encarga de listar los archivos y carpetas retornándolos en un vector.
@@ -51,8 +49,7 @@
             }
            
             return $result;
-        } 
-        
+        }         
         
         /**
          * Esta función se encarga de organizar un contenido de un vector retornando salidas html.
@@ -70,8 +67,7 @@
             }            
             
             return $salida;
-        }
-        
+        }        
         
         /**
          * Este código es de http://www.elcodigofuente.com/leer-archivos-directorio-carpeta-php-812/
@@ -121,8 +117,7 @@
             
             return $salida;
         }
-        
-        
+                
         /**
          * Convierte el nombre de un archivo a su enlace. En el caso de carpetas, debe suministrar un enlace que permita a la
          * aplicación saber qué directorio listará.
@@ -142,16 +137,18 @@
             }else{
                     //Es carpeta.
                     
-                    $salida = "<a href='$destino?destino=$ruta' target='_self'><img src='img/carpeta.jpg'></a>";
+                    $tmp_ruta = $this->encrypt_decrypt( 'encrypt', $ruta ); //13/12/2018, ojo, la encriptación.
+                    $salida = "<a href='$destino?destino=$tmp_ruta' target='_self'><img src='img/carpeta.jpg'></a>";
                     
                     if( $dato == null )
                     {
                         //Esta es para las Migas de Pan.
                         //$salida = "<a href='$destino?destino=$ruta' target='_self'>".$etiqueta."</a>";
-                        $salida = "<a href='$destino?destino=$ruta' target='_self'><img src='img/volver.png'></a>";
+                        $salida = "<a href='$destino?destino=$tmp_ruta' target='_self'><img src='img/volver.png'></a>";
                         
                     }else{
-                            $salida .= "<a href='$destino?destino=$ruta/$dato' target='_self'>".$dato."</a>";
+                            $tmp_ruta = $this->encrypt_decrypt( 'encrypt', $ruta."/".$dato ); //13/12/2018
+                            $salida .= "<a href='$destino?destino=$tmp_ruta' target='_self'>".$dato."</a>";
                         }
                     
                 }
@@ -228,8 +225,7 @@
             //No es suficiente con traer la carpeta porque físicamente hay contenencia de carpetas.
             
             return $this->retornar_datos( "prm_claves", "carpeta_nivel", " nivel >= ".$nivel, " nivel DESC ", 2 );
-        }
-        
+        }        
         
         /**
          * Retorna la carpeta principal desde donde se despliega todo.
@@ -258,4 +254,23 @@
             
             return $salida;
         }
+        
+        /**
+		 * La siguiente función se encarga de escribir algun dato en un archivo de texto, puede servir para escribir un log o un listado
+		 * de errores.
+		 * @param  			texto  				Una cadena que será escrita en un archivo de texto.
+		 * @param 			texto 				Nombre de un archivo que será creado en la carpeta actual.
+		 */
+		function escribir_archivo_txt( $cadena, $nombre_archivo )
+		{
+			include( "config.php" ); //Aquí se traen los parámetros de la base de datos.
+			//Hay que recordar que solo debería existir un archivo que permita dicha configuración.
+			//Para este caso el config ajusta elementos adicionales de configuración además de la base de datos.
+			
+            $archivo = fopen( $nombre_archivo.".txt", "w" ); //Esta instruccción crea el archivo.
+            fwrite( $archivo, $cadena.PHP_EOL );
+            fclose( $archivo );	
+			
+		}
+		
     }

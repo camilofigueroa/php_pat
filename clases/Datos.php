@@ -1,6 +1,14 @@
 <?php
 
-    class Datos
+    /**
+     * Autor: Camilo Figueroa (Crivera ).
+     * Esta clase tiene como propósito el acceso único a la base de datos.
+     *
+     */
+
+    include( "clases/Seguridad.php" );
+     
+    class Datos extends Seguridad
     {
         
         /**

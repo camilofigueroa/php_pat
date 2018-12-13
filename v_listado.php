@@ -25,7 +25,11 @@
             $nivel = $_SESSION[ 'nivel' ];
             
             //Asignamos la variable de la ruta a la cual vamos a llevar al usuario.
-            if( isset( $_GET[ 'destino' ] ) ) $destino = $_GET[ 'destino' ];
+            if( isset( $_GET[ 'destino' ] ) )
+            {
+                $destino = $_GET[ 'destino' ];
+                $destino = $obj_operaciones->encrypt_decrypt('decrypt', $destino ); //Se desencripta la ruta.
+            }
             
         }else{
                 header( "location: v_autenticacion.php" );

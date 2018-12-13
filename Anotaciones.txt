@@ -1,0 +1,16 @@
+
+
+
+Ejemplo de la encriptación.
+
+	    <?php
+            
+                $plain_txt = "opciones/canción/aja";
+                echo "Plain Text =" .$plain_txt. "\n";
+                
+                $encrypted_txt = $obj_operaciones->encrypt_decrypt('encrypt', $plain_txt);
+                echo "Encrypted Text = " .$encrypted_txt. "\n";
+                
+                $decrypted_txt = $obj_operaciones->encrypt_decrypt('decrypt', $encrypted_txt);
+                echo "Decrypted Text =" .$decrypted_txt. "\n";
+            ?>
