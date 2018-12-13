@@ -20,7 +20,7 @@
         public function Operaciones()
         {
             if( !isset( $_SESSION ) ) session_start();
-            echo $_SESSION[ 'nivel' ]." -> ";
+            //echo $_SESSION[ 'nivel' ]." -> ";
             
             $this->ini();
         }        
@@ -172,25 +172,21 @@
             $tmp_ruta = "";
             $nivel = $_SESSION[ 'nivel' ];
             $carpeta_nivel = $this->arreglar_ruta( TRIM( $this->ajustar_carpeta_nivel( $nivel ) ) );
-            //$arreglo2 = [];
             
-            //echo "<br>".$ruta."  1<br>";
             //Cuando la ruta es exterior a la carpeta, se tratará un poco diferente.
             if( $this->g_sitio_exterior == 1 )
             {
-                //echo "<br><strong>".$this->retornar_carpeta_principal()."/".$carpeta_nivel."</strong><br>";
                 $ruta = str_replace( $this->retornar_carpeta_principal()."/".$carpeta_nivel, "", $ruta );
             }
             
             $ruta = $this->arreglar_ruta( $ruta ); //Se quitan diagonales iniciales, finales y dobles.
-            //echo "<br>".$ruta."  2<br>";
-                        
+                                    
             if( TRIM( $ruta ) != "" )
             {                
                 if( $ruta != $carpeta_nivel ) //Quita el problema de que al entrar en un nivel, deja devuelta para el que lo contiene.
                 {                       
                     $arreglo = explode( "/", $ruta );
-                    print_r( $arreglo );
+                    //print_r( $arreglo );
                     
                     //Si la carpeta con el contenido está fuera del sitio, hay que tener cuidado con las rutas.
                     if( $this->g_sitio_exterior == 1 )
@@ -200,18 +196,18 @@
                         $tmp_ruta = $this->retornar_carpeta_principal()."/".$carpeta_nivel."/".$tmp_ruta;
                     }                    
                     
+                    $salida .= "<table><tr>";
+                    
                     //Aquí empiezan a armarse los diferentes enlaces de las migas de pan.
                     for( $i = 0; $i < count( $arreglo ); $i ++ )
                     {
                         if( $i - 1 >= 0 ) $tmp_ruta .= $arreglo[ $i - 1 ]."/";                        
-                        $salida .= $this->convertir_enlace_o_no( $tmp_ruta, null, "v_listado.php", $tmp_ruta )."<br/>";                        
+                        $salida .= "<td>".$this->convertir_enlace_o_no( $tmp_ruta, null, "v_listado.php", $tmp_ruta )."</td>";                        
                     }
+                    
+                    $salida .= "</table></tr><br>";
                 }
             }
-            
-            //echo $salida."<br>";
-            //print_r( $arreglo2 );
-            //echo "<hr>";
                         
             return $salida;
             //return "";
