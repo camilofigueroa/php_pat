@@ -5,11 +5,16 @@
 
 body
 {
-    color: red;
+    color: gray;
     background-image: url( "../img/fondo.jpg" );
     background-repeat: no-repeat;
 }
 
+table
+{
+    width: 100%;
+    align-content: center;
+}
 
 .contenedor-general-objetos
 {
@@ -19,7 +24,10 @@ body
     opacity: 0.95;
     /*width: 100%;*/
     padding: 10px 10px 20px 10px;
-    /*box-shadow: 10px 10px 5px #aaaaaa;*/
+    /*box-shadow: 5px 5px 20px maroon;*/
+    /*box-shadow: 0 0 15px 0 maroon;*/
+    box-shadow: 8px 8px 10px 0;
+    /*box-shadow: inset 15px 15px 50px 0;*/
 }
 
 .footer 

@@ -19,3 +19,12 @@
     
     //Configurar aquí los tipos de archivo que no se quieran mostrar.
     $lista_archivos_no_mostrar = array( ".php", ".html", ".exe", ".htm", ".xml", ".xls", ".xlsx" );
+    
+    //Texto del footer
+    $texto_footer = "Prueba de sitio patrocinio. <br>";
+    $texto_footer .= "<table><tr>";
+    $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";
+    $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";
+    $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";
+    $texto_footer .= "</tr></table>";
+    $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";

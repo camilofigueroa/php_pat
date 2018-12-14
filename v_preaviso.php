@@ -5,16 +5,16 @@
      *
      *
      */
-
+    
     include( "clases/Operaciones.php" );
-
+    
     $obj_operaciones = new Operaciones();
     
     if( !isset( $_SESSION ) ) session_start();
     $_SESSION[ 'en_sesion' ] = 0;
     $_SESSION[ 'nivel' ] = -1;
     $_SESSION[ 'ruta' ] = "";
-        
+    
 ?>
 
 <!doctype html>
@@ -27,54 +27,37 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+        
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="css/estilos.css"> 
         
-        <title><?= $obj_operaciones->retornar_titulo_app() ?></title>       
+        <!-- Este script se invoca aquí porque abajo no estaba funcionando. -->
+        <script src="js/operaciones.js"></script>
         
+        <title><?= $obj_operaciones->retornar_titulo_app() ?></title>       
     </head>
     
     <body>
         
-        <br>
+        <br><br>
         
         <div class="container">
-                                    
-            <form action="c_autenticar.php" method="post" class="col s12">
-                
-                <select name="nivel">
-                    
-                    <!-- Aquí se ajustan los niveles de carpetas, pero deben estar acordes y almacenados en la base de datos. -->
-                    <option value="-1">Please select.</option>
-                    <option value="10">Nivel 10</option>
-                    <option value="2">Nivel 2</option>
-                    <option value="1">Nivel 1</option>
-                    
-                </select>                            
-                
-                <input type="password" name="clave" maxlength=50>
-                <input type="submit" value="Entrar">
-                <br>
-                <br> 
-                
-            </form>
-               
-        </div> <!-- container -->
-                        
-        <hr>
-        
-        <!-- La caja de mensajes -->
-        <div class="container">
-        
-            <?php
-                                        
-                if( isset( $_GET[ 'error' ] ) ) echo $obj_operaciones->colocar_alerta( "Sorry - perdón.", $_GET[ 'error' ] ); 
-                
-            ?>
+            
+            <div class="contenedor-general-objetos">
+            
+                <h1>If you want to go forward, please reload this page and click on accept button.</h1>
+                <h2>Si deseas avanzar, por favor recarga esta página y da clic en el botón de aceptar.</h2>
+            
+            </div>
         
         </div>
+        
+        <script>
+            
+            aceptar_negar_cookies();
+            
+        </script>
         
         <br><br><br><br><br>
                         

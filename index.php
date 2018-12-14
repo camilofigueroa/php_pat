@@ -1,3 +1,3 @@
 <?php
 
-    header( "location: v_autenticacion.php" );
+    header( "location: v_preaviso.php" );

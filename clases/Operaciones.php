@@ -23,6 +23,7 @@
             //echo $_SESSION[ 'nivel' ]." -> ";
             
             $this->ini();
+            
         }        
         
         /**
@@ -138,8 +139,16 @@
             if( $destino == null )
             {
                 //Es archivo.
-                $salida = "<a href='".$ruta."/".$dato."' target='_blank'><img src='img/".$this->retornar_tipo_archivo( $dato )."'></a>";
-                $salida .= "<a href='".$ruta."/".$dato."' target='_blank'>".$dato."</a>";
+                $salida = ""; //"<table border='1px'><tr>";
+                //$salida .= "<td>";
+                $salida .= "<img src='img/".$this->retornar_tipo_archivo( $dato )."'>";
+                $salida .= "<a href='".$ruta."/".$dato."'  onclick=\"trackOutboundLink( '".$ruta."/".$dato."' ); return false;\"  target='_blank'>".$dato."</a> ";
+                //$salida .= "</td>";
+                //$salida .= "<td>";
+                $salida .= "&nbsp;&nbsp;&nbsp;&nbsp;".date( "F d Y H:i:s.", filectime( $ruta."/".$dato ) );
+                $salida .= "&nbsp;&nbsp;<strong>".$this->convertir_peso( $ruta."/".$dato )."</strong>";
+                //$salida .= "<td>";
+                //$salida .= "</tr></table>";
                 
             }else{
                     //Es carpeta.
@@ -283,9 +292,18 @@
             $salida = "archivo.jpg";
             $nombre = strtolower( $nombre );
             
-            if( strpos( $nombre, ".mp4" ) !== false )       $salida = "video.jpg";
-            if( strpos( $nombre, ".flv" ) !== false )       $salida = "video.jpg";
-            if( strpos( $nombre, ".wmv" ) !== false )       $salida = "video.jpg";
+            if( strpos( $nombre, ".mp4" ) !== false )           $salida = "video.jpg";
+            if( strpos( $nombre, ".flv" ) !== false )           $salida = "video.jpg";
+            if( strpos( $nombre, ".wmv" ) !== false )           $salida = "video.jpg";
+            if( strpos( $nombre, ".pdf" ) !== false )           $salida = "documento.jpg";
+            if( strpos( $nombre, ".xml" ) !== false )           $salida = "documento.jpg";
+            if( strpos( $nombre, ".doc" ) !== false )           $salida = "documento.jpg";
+            if( strpos( $nombre, ".docx" ) !== false )          $salida = "documento.jpg";
+            if( strpos( $nombre, ".jpg" ) !== false )           $salida = "imagen.jpg";
+            if( strpos( $nombre, ".jpeg" ) !== false )          $salida = "imagen.jpg";
+            if( strpos( $nombre, ".bmp" ) !== false )           $salida = "imagen.jpg";
+            if( strpos( $nombre, ".gif" ) !== false )           $salida = "imagen.jpg";
+            if( strpos( $nombre, ".png" ) !== false )           $salida = "imagen.jpg";
             
             return $salida;
         }
@@ -367,4 +385,43 @@
             return $salida;            
         }
         
+        /**
+         * Retorna el texto del footer desde el config.
+         * @return      texto       Texto del footer del config.
+         */
+        function traer_texto_footer()
+        {
+            include( "config.php" );
+            
+            return $texto_footer;
+        }
+        
+        /**
+         * Convierte el peso de un archivo o la cifra en otra.
+         * @param       texto       Representa la ruta del archivo que se va a revisar.
+         * @return      texto       Texto que representa un peso específico de archivo.
+         */
+        function convertir_peso( $ruta )
+        {
+            $salida = "";
+            $unidad_final = " bytes ";
+          
+            $salida = filesize( $ruta ); //Retorna la cantidad en bytes.
+            
+            if( $salida > 1024 )
+            {
+                $salida = round( $salida / 1024, 2 );
+                $unidad_final = " KB";
+            }
+            
+            if( $salida > 1024 )
+            {
+                $salida = round( $salida / 1024, 2 );
+                $unidad_final = " MB";
+            }
+            
+            $salida .= $unidad_final;
+            
+            return $salida;
+        }        
     }

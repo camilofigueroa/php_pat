@@ -107,8 +107,10 @@
         
         </div>
         
+        <br><br><br><br><br>
+        
         <footer class="footer">
-            <p>&copy; Company 2017-2018</p>
+            <p><?= $obj_operaciones->traer_texto_footer() ?></p>
         </footer>
         
         <!-- Optional JavaScript -->
