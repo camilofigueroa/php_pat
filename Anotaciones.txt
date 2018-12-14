@@ -14,3 +14,7 @@ Ejemplo de la encriptación.
                 $decrypted_txt = $obj_operaciones->encrypt_decrypt('decrypt', $encrypted_txt);
                 echo "Decrypted Text =" .$decrypted_txt. "\n";
             ?>
+
+
+
+Colores: 6160a3 9D9324 9D6A24

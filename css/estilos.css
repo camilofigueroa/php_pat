@@ -6,5 +6,29 @@
 body
 {
     color: red;
+    background-image: url( "../img/fondo.jpg" );
+    background-repeat: no-repeat;
 }
 
+
+.contenedor-general-objetos
+{
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+    opacity: 0.95;
+    /*width: 100%;*/
+    padding: 10px 10px 20px 10px;
+    /*box-shadow: 10px 10px 5px #aaaaaa;*/
+}
+
+.footer 
+{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #9D6A24;
+    color: white;
+    text-align: center;
+ }

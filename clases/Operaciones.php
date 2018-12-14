@@ -85,6 +85,7 @@
             $salida = "";
             $directorio = opendir( $ruta ); //ruta actual
             $migas_pan = "";
+            $tmp_pos_extension = -1;
             
             if( strpos( $ruta, "../" ) !== false ) $this->g_sitio_exterior = 1;
             
@@ -99,7 +100,9 @@
             
             while ( false != ( $archivo = readdir( $directorio ) ) ) //obtenemos un archivo y luego otro sucesivamente
             {
-                if( $archivo != "." && $archivo != ".." && strpos( $archivo, ".php" ) === false ) //Omitimos el retroceso y phps.
+                $tmp_pos_extension = $this->aprobar_descartar_archivo( $archivo, $this->archivos_no_mostrar() );
+                
+                if( $archivo != "." && $archivo != ".." && $tmp_pos_extension < 0  ) //Omitimos el retroceso y phps.
                 {                
                     if ( is_dir( $ruta."/".$archivo ) ) //verificamos si es o no un directorio
                     {
@@ -201,7 +204,7 @@
                     //Aquí empiezan a armarse los diferentes enlaces de las migas de pan.
                     for( $i = 0; $i < count( $arreglo ); $i ++ )
                     {
-                        if( $i - 1 >= 0 ) $tmp_ruta .= $arreglo[ $i - 1 ]."/";                        
+                        if( $i - 1 >= 0 ) $tmp_ruta .= $arreglo[ $i - 1 ]."/";
                         $salida .= "<td>".$this->convertir_enlace_o_no( $tmp_ruta, null, "v_listado.php", $tmp_ruta )."</td>";                        
                     }
                     
@@ -211,6 +214,33 @@
                         
             return $salida;
             //return "";
+        }
+        
+        /**
+         * Busca una coincidencia de una cadena en un vector o en la cadena de una posición de este 
+         * Se informa con la posición de esa coincidencias, si no la encuentra retorna -1.
+         * @param       texto       Cadena o valor buscado.
+         * @param       array       Arreglo en el cual hay que buscar.
+         * @return      número      Posición de la coincidencia.
+         */
+        function aprobar_descartar_archivo( $valor_buscado, $arreglo )
+        {
+            $posicion = -1;
+            
+            for( $i = 0; $i < count( $arreglo ); $i ++ )
+            {
+                //echo $arreglo[ $i ];
+                
+                if( strpos( $valor_buscado, $arreglo[ $i ]."" ) !== false )
+                {
+                    $posicion = $i;
+                    //echo "___OK___ ->".$valor_buscado." ".$posicion;
+                    break;
+                
+                }
+            }
+            
+            return $posicion;
         }
         
         /**
@@ -287,6 +317,18 @@
             include( "config.php" );
             return $titulo_aplicacion;
         }
+        
+        /**
+         * Esta función accede al config y retorna la lista de los tipos de archivo que no se deberían mostrar.
+         * @return       array           Un arreglo o vector con los tipos de archivo que no se deberían mostrar.
+         */
+        function archivos_no_mostrar()
+        {
+            include( "config.php" );
+    
+            //Es un arreglo con los archivos que no se van a mostrar.            
+            return $lista_archivos_no_mostrar;
+        }
 		
         /**
          * Quita primera diagonal, última, y otras cosas que se tienen planeadas.
@@ -305,6 +347,24 @@
             if( TRIM( substr( $ruta, strlen( $ruta ) - 1 ) ) == "/" ) $ruta = substr( $ruta, 0, strlen( $ruta ) - 1 );
             
             return $ruta;
+        }
+        
+        /**
+         * Retorna el código html para un mensaje de alerta Bootstrap.
+         *
+         */
+        function colocar_alerta( $titulo, $mensaje )
+        {
+            $salida = "";           
+        
+            $salida .= "    <div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\"> ";
+            $salida .= "        <strong>$titulo</strong> $mensaje ";
+            $salida .= "        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"> ";
+            $salida .= "        <span aria-hidden=\"true\">&times;</span> ";
+            $salida .= "        </button> ";
+            $salida .= "    </div> ";
+            
+            return $salida;            
         }
         
     }

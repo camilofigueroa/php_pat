@@ -10,11 +10,7 @@
 
     $obj_operaciones = new Operaciones();
     
-    //echo $obj_operaciones->listar_contenido( "usuarios" );
-    
-    //echo getcwd(); //Retorna directorio actual de trabajo.
-    
-    session_start();
+    if( !isset( $_SESSION ) ) session_start();
     $_SESSION[ 'en_sesion' ] = 0;
     $_SESSION[ 'nivel' ] = -1;
     $_SESSION[ 'ruta' ] = "";
@@ -33,12 +29,15 @@
     
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="css/estilos.css"> 
         
-        <title></title>       
+        <title><?= $obj_operaciones->retornar_titulo_app() ?></title>       
         
     </head>
     
     <body>
+        
+        <br>
         
         <div class="container">
                                     
@@ -46,6 +45,7 @@
                 
                 <select name="nivel">
                     
+                    <!-- Aquí se ajustan los niveles de carpetas, pero deben estar acordes y almacenados en la base de datos. -->
                     <option value="-1">Please select.</option>
                     <option value="10">Nivel 10</option>
                     <option value="2">Nivel 2</option>
@@ -58,19 +58,24 @@
                 <br>
                 <br> 
                 
-                <?php
-                
-                    if( isset( $_GET[ 'error' ] ) ) echo "<br>".$_GET[ 'error' ]."<br>";
-                
-                ?>
-                
             </form>
                
         </div> <!-- container -->
                         
         <hr>
+        
+        <!-- La caja de mensajes -->
+        <div class="container">
+        
+            <?php
+                                        
+                if( isset( $_GET[ 'error' ] ) ) echo $obj_operaciones->colocar_alerta( "Sorry - perdón.", $_GET[ 'error' ] ); 
+                
+            ?>
+        
+        </div>
                         
-        <footer class="container">
+        <footer class="footer">
             <p>&copy; Company 2017-2018</p>
         </footer>
         

@@ -10,7 +10,7 @@
     include( "clases/Operaciones.php" );
     $obj_operaciones = new Operaciones();
  
-    session_start();
+    if( !isset( $_SESSION ) ) session_start();
     $en_sesion = 0;
     $nivel = -1;
     $destino = "";
@@ -52,48 +52,62 @@
     
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="css/estilos.css">
         
-        <title></title>        
+        <title><?= $obj_operaciones->retornar_titulo_app() ?></title>        
         
     </head>
     
     <body>
         
-        <div class="container">
+        <br>
         
-            <a href="v_autenticacion.php">Home - Inicio.</a>
+        <div class="container">
             
-            <br>
-            <br>
+            <div class="contenedor-general-objetos">
+        
+                <a href="v_autenticacion.php">Home - Inicio.</a>
+                
+                <br>
+                <br>
+                
+                <?php
+              
+                    if( $en_sesion * 1 > 0 )
+                    {
+                        //echo "<hr>".$destino."<hr>";
+                        
+                        if( TRIM( $destino ) == "" ) $destino = $obj_operaciones->retornar_carpeta_principal().$obj_operaciones->ajustar_carpeta_nivel( $nivel );
+                        
+                        //echo $destino;
+                        
+                        //echo $obj_operaciones->listar_contenido( $destino );
+                        echo $obj_operaciones->listar_contenido( $destino, "carpetas", 1 );
+                        echo $obj_operaciones->listar_contenido( $destino, "archivos" );
+                        
+                        echo "<br>";               
+                        
+                    }else{
+                        
+                        echo "No est&aacute;s autorizado.";                
+                    }        
+                
+                ?>
             
-            <?php
-          
-                if( $en_sesion * 1 > 0 )
-                {
-                    //echo "<hr>".$destino."<hr>";
-                    
-                    if( TRIM( $destino ) == "" ) $destino = $obj_operaciones->retornar_carpeta_principal().$obj_operaciones->ajustar_carpeta_nivel( $nivel );
-                    
-                    //echo $destino;
-                    
-                    //echo $obj_operaciones->listar_contenido( $destino );
-                    echo $obj_operaciones->listar_contenido( $destino, "carpetas", 1 );
-                    echo $obj_operaciones->listar_contenido( $destino, "archivos" );
-                    
-                    echo "<br>";               
-                    
-                }else{
-                    
-                    echo "No est&aacute;s autorizado.";                
-                }        
-            
-            ?>
+            </div>
         
         </div> <!-- container -->
         
         <hr>
         
-        <footer class="container">
+        <!-- La caja de mensajes -->
+        <div class="container">
+        
+            <?= $obj_operaciones->colocar_alerta( "Welcome - bienvenido.", "Please feel free to download all you want - por favor siéntete libre para descargar lo que quieras." ); ?>
+        
+        </div>
+        
+        <footer class="footer">
             <p>&copy; Company 2017-2018</p>
         </footer>
         

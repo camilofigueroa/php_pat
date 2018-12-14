@@ -12,7 +12,7 @@
  
     $en_sesion = 0;
     session_start();
-    $error = "You do not have acces to this... No tienes acceso a esto...";
+    $error = "You do not have access to this... No tienes acceso a esto...";
         
     //Si las variables post vienen, se verifican.
     if( isset( $_POST[ 'nivel' ] ) && isset( $_POST[ 'clave' ] ) )

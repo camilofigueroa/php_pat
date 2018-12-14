@@ -1,5 +1,7 @@
 <?php
 
+    $titulo_aplicacion = "Patrocinico.";
+
     $servidor   = "localhost";
     $usuario    = "root";
     $clave      = "camilof1234";
@@ -14,3 +16,6 @@
     //Se implementa esta nueva forma de encriptar al 13/12/2018.
     $secret_key = 'Nueva opción de llave.';
     $secret_iv = 'Otra opcion de llave';
+    
+    //Configurar aquí los tipos de archivo que no se quieran mostrar.
+    $lista_archivos_no_mostrar = array( ".php", ".html", ".exe", ".htm", ".xml", ".xls", ".xlsx" );
