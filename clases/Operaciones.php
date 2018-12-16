@@ -136,8 +136,14 @@
          */
         function convertir_enlace_o_no( $ruta, $dato, $destino = null, $etiqueta = null )
         {
+            $tmp_fecha_archivo1 = "";
+            $tmp_fecha_archivo2 = "";
+            
             if( $destino == null )
             {
+                $tmp_fecha_archivo1 = date( "F d Y H:i:s.", filectime( $ruta."/".$dato ) );
+                $tmp_fecha_archivo2 = date( "Y-n-d", filectime( $ruta."/".$dato ) );
+                
                 //Es archivo.
                 $salida = ""; //"<table border='1px'><tr>";
                 //$salida .= "<td>";
@@ -145,8 +151,8 @@
                 $salida .= "<a href='".$ruta."/".$dato."'  onclick=\"trackOutboundLink( '".$ruta."/".$dato."' ); return false;\"  target='_blank'>".$dato."</a> ";
                 //$salida .= "</td>";
                 //$salida .= "<td>";
-                $salida .= "&nbsp;&nbsp;&nbsp;&nbsp;".date( "F d Y H:i:s.", filectime( $ruta."/".$dato ) );
-                $salida .= "&nbsp;&nbsp;<strong>".$this->convertir_peso( $ruta."/".$dato )."</strong>";
+                $salida .= "&nbsp;&nbsp;&nbsp;&nbsp;".$tmp_fecha_archivo1;
+                $salida .= "&nbsp;&nbsp;<strong>".$this->convertir_peso( $ruta."/".$dato )."</strong> ".$this->comparar_fechas( $tmp_fecha_archivo2 );
                 //$salida .= "<td>";
                 //$salida .= "</tr></table>";
                 
@@ -423,5 +429,23 @@
             $salida .= $unidad_final;
             
             return $salida;
-        }        
+        }
+        
+        /**
+         * Esta función se encarga de comparar fechas y decir si el archivo es de este mes.
+         * @param       texto           Una cadena que representa la fecha de un archivo o dato.
+         * @return      texto           Un texto que dice si la fecha suministrada es de mes actual.
+         */
+        function comparar_fechas( $fecha_archivo)
+        {
+            $salida = "";
+            
+            if( ( date( "Y" ) * 100 + date( "n" ) ) == ( date( "Y", strtotime( $fecha_archivo ) ) * 100 + date( "m", strtotime( $fecha_archivo ) ) ) )
+            {
+                $salida = " ...of this month - de este mes.";
+            }
+            
+            
+            return $salida;            
+        }
     }
