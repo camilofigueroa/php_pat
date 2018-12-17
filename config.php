@@ -22,7 +22,7 @@
     
     //Texto del footer
     $texto_footer = "Prueba de sitio patrocinio. <br>";
-    $texto_footer .= "<table><tr>";
+    $texto_footer .= "<table id='tabla-footer'><tr>";
     $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";
     $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";
     $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";

@@ -23,7 +23,7 @@
         /**
          * Retorna la conexion a la base de datos.
          * 
-         *
+         * @return      conexion mysql          Retorna una conexión tipo MySQL.
          */
         function retornar_conexion()
         {
@@ -78,6 +78,41 @@
             $conexion->close();
             
             return $salida;
+        }
+        
+        /**
+         * Escribe un archivo en una tabla. El índice o clave primaria ruta/nombre archivo impedirá que se registren
+         * tuplas iguales.
+         * @param       texto       Ruta del archivo
+         * @param       texto       Nombre del archivo.
+         * @param       texto       Fecha creación del archivo.
+         * @return      Número      1 o 0 dependiendo de si se grabó el registro o no.
+         */
+        function insertar_archivo( $ruta, $archivo, $fecha_creacion )
+        {          
+            $salida = 0;
+            
+            $ruta               = TRIM( $ruta );
+            $archivo            = TRIM( $archivo );
+            $fecha_creacion     = TRIM( $fecha_creacion );
+            
+            //Había un error que estaba ocurriendo en las rutas, no era crítico pero obligaba a usar esta línea en muchas partes.
+            //if( strpos( $ruta, "//" ) !== false ) $ruta = str_replace( "//", "/", $ruta );
+            
+            $conexion = $this->retornar_conexion();
+            
+            $sql  = " INSERT INTO tb_archivos ( ruta, archivo, sn_existe, fecha_creacion, fecha_registro ) ";
+            $sql .= " VALUES( '$ruta', '$archivo', 1,  '$fecha_creacion', NOW() ) ";
+            //echo $sql;
+            
+            $resultado = $conexion->query( $sql );
+            
+            if( $conexion->affected_rows > 0 )
+            {
+                $salida = 1;
+            } 
+            
+            return $salida;            
         }
         
     }

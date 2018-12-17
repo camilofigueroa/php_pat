@@ -135,26 +135,41 @@
          * @return      texto       Texto que representa un enlace html para ser puesto en pantalla.
          */
         function convertir_enlace_o_no( $ruta, $dato, $destino = null, $etiqueta = null )
-        {
+        {            
             $tmp_fecha_archivo1 = "";
             $tmp_fecha_archivo2 = "";
+            $estilo_imagen = "";
+            $gif_aviso = "";
+            $ruta_dato = $ruta."/".$dato;
+            if( strpos( $ruta, "//" ) !== false ) $ruta = str_replace( "//", "/", $ruta );
+            if( strpos( $ruta_dato, "//" ) !== false ) $ruta_dato = str_replace( "//", "/", $ruta_dato );
             
             if( $destino == null )
             {
-                $tmp_fecha_archivo1 = date( "F d Y H:i:s.", filectime( $ruta."/".$dato ) );
-                $tmp_fecha_archivo2 = date( "Y-n-d", filectime( $ruta."/".$dato ) );
+                $tmp_fecha_archivo1 = date( "F d Y H:i:s.", filectime( $ruta_dato ) );
+                $tmp_fecha_archivo2 = date( "Y-n-d", filectime( $ruta_dato ) );
+                                
+                $estilo_imagen =  $this->comparar_fechas( $tmp_fecha_archivo2 ) == "" ? "imagen-icono-normal": "imagen-icono-destacado";
+                $gif_aviso =  $this->comparar_fechas( $tmp_fecha_archivo2 ) == "" ? "": "<img src='img/gif-aviso.gif'>";
                 
                 //Es archivo.
                 $salida = ""; //"<table border='1px'><tr>";
                 //$salida .= "<td>";
-                $salida .= "<img src='img/".$this->retornar_tipo_archivo( $dato )."'>";
-                $salida .= "<a href='".$ruta."/".$dato."'  onclick=\"trackOutboundLink( '".$ruta."/".$dato."' ); return false;\"  target='_blank'>".$dato."</a> ";
+                //Para resaltar los archivos del mes, se usarán diferentes estilos en el tamaño del ícono del archivo.
+                $salida .= "<img class='$estilo_imagen' src='img/".$this->retornar_tipo_archivo( $dato )."'>".$gif_aviso." ";
+                $salida .= "<a href='".$ruta_dato."'  onclick=\"trackOutboundLink( '".$ruta_dato."' ); return false;\"  target='_blank'>".$dato."</a> ";
                 //$salida .= "</td>";
                 //$salida .= "<td>";
                 $salida .= "&nbsp;&nbsp;&nbsp;&nbsp;".$tmp_fecha_archivo1;
-                $salida .= "&nbsp;&nbsp;<strong>".$this->convertir_peso( $ruta."/".$dato )."</strong> ".$this->comparar_fechas( $tmp_fecha_archivo2 );
+                $salida .= "&nbsp;&nbsp;<strong>".$this->convertir_peso( $ruta_dato )."</strong> ".$this->comparar_fechas( $tmp_fecha_archivo2 );
                 //$salida .= "<td>";
                 //$salida .= "</tr></table>";
+                
+                //Si el archivo no existe, lo registramos en la BD.
+                //Al principio el índice indicaría si se registraría o no, pero luego tocó hacer esta comprobación
+                //porque intentar grabar las tuplas sin verificar los archivos hacía lento el proceso.
+                if( $this->retornar_datos( "tb_archivos", "COUNT( * )", " ruta = '$ruta' AND archivo = '$dato' " ) * 1 == 0 )
+                $this->insertar_archivo( $this->arreglar_ruta( $ruta ), $dato, $tmp_fecha_archivo2 );
                 
             }else{
                     //Es carpeta.
@@ -169,7 +184,7 @@
                         $salida = "<a href='$destino?destino=$tmp_ruta' target='_self'><img src='img/volver.png'></a>";
                         
                     }else{
-                            $tmp_ruta = $this->encrypt_decrypt( 'encrypt', $ruta."/".$dato ); //13/12/2018
+                            $tmp_ruta = $this->encrypt_decrypt( 'encrypt', $ruta_dato ); //13/12/2018
                             $salida .= "<a href='$destino?destino=$tmp_ruta' target='_self'>".$dato."</a>";
                         }                    
                 }            
