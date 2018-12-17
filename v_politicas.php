@@ -57,8 +57,9 @@
                 <p>Internet Explorer: <i>Herramientas -> Opciones de Internet -> Privacidad -> Configuración.</i> Para más información, puede consultar el soporte de Microsoft o la Ayuda del navegador.</p>
                 <p>Safari: <i>Preferencias -> Seguridad.</i> Para más información, puede consultar el soporte de Apple o la Ayuda del navegador.</p>
                 <p><strong>SESSION:</strong> esta cookie es propia del sitio y sirve para mantener la sesión de aquellos que están autorizados y para mantener fuera los que no lo están.</p>
-                <p><strong>_ga:</strong> esta cookie es de Google Analytics o analíticas de Google. <a href="https://developers.google.com/analytics/devguides/collection/gajs/cookie-usage" target="_blank">Más.</a></p>
-                <p><strong>_gid:</strong> esta cookie es de Google Analytics o analíticas de Google. <a href="https://developers.google.com/analytics/devguides/collection/gajs/cookie-usage" target="_blank">Más.</a></p>
+                <p><strong>_ga:</strong> esta cookie es de Google Analytics o analíticas de Google. <a href="https://developers.google.com/analytics/devguides/collection/gajs/cookie-usage" target="_blank" rel="nofollow">Más.</a></p>
+                <p><strong>_gid:</strong> esta cookie es de Google Analytics o analíticas de Google. <a href="https://developers.google.com/analytics/devguides/collection/gajs/cookie-usage" target="_blank" rel="nofollow">Más.</a></p>
+                <p>Con respecto de las cookies de terceros, este sitio no se hace responsable del contenido y veracidad de sus políticas de privacidad o del uso que ellos puedan darle a la información sobre los usuarios y su comportamiento, almacenados en sus bases de datos o cualquier otra arquitectura o medio de almacenamiento.</p>
 
             </div>
                

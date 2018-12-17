@@ -23,8 +23,24 @@
     //Texto del footer
     $texto_footer = "Prueba de sitio patrocinio. <br>";
     $texto_footer .= "<table id='tabla-footer'><tr>";
-    $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";
-    $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";
-    $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";
+    $texto_footer .= "<td><a href='http://www.google.com' target='_blank' class='text-warning'>Enlace</a></td>";
+    $texto_footer .= "<td><a href='http://www.google.com' target='_blank' class='text-warning'>Enlace</a></td>";
+    $texto_footer .= "<td><a href='http://www.google.com' target='_blank' class='text-warning'>Enlace</a></td>";
     $texto_footer .= "</tr></table>";
-    $texto_footer .= "<td><a href='http://www.google.com' target='_blank'>Enlace</a></td>";
+    $texto_footer .= "<td><a href='v_politicas.php' target='_self' class='text-warning'>Uso de cookies</a></td>";
+    
+    
+    /*    
+        Colores de enlaces del bootstrap
+        
+        <p><a href="#" class="text-primary">Primary link</a></p>
+        <p><a href="#" class="text-secondary">Secondary link</a></p>
+        <p><a href="#" class="text-success">Success link</a></p>
+        <p><a href="#" class="text-danger">Danger link</a></p>
+        <p><a href="#" class="text-warning">Warning link</a></p>
+        <p><a href="#" class="text-info">Info link</a></p>
+        <p><a href="#" class="text-light bg-dark">Light link</a></p>
+        <p><a href="#" class="text-dark">Dark link</a></p>
+        <p><a href="#" class="text-muted">Muted link</a></p>
+        <p><a href="#" class="text-white bg-dark">White link</a></p>
+    */

@@ -12,6 +12,7 @@
     {        
         public $g_sitio_exterior = 0; //Variable para almacenar si las carpetas de patrocinio estarán interna o externamente.
         public $g_carpeta_nivel = ""; //Para almacenar la carpeta del nivel.
+        private $g_total_archivos = 0; //Para contar los archivos por carpeta.
         
         /**
          * Constructor de la clase.
@@ -87,6 +88,7 @@
             $directorio = opendir( $ruta ); //ruta actual
             $migas_pan = "";
             $tmp_pos_extension = -1;
+            $this->g_total_archivos = 0;
             
             if( strpos( $ruta, "../" ) !== false ) $this->g_sitio_exterior = 1;
             
@@ -121,7 +123,13 @@
             
             closedir( $directorio );            
             
-            if( $imp_migas != null ) $salida = $migas_pan.$salida;
+            if( $imp_migas != null )
+            {
+                $salida = $migas_pan.$salida;
+                
+            }else{
+                    $salida .= "<br>Files - archivos: ".$this->g_total_archivos." <br>";       
+                }
             
             return $salida;
         }
@@ -140,6 +148,8 @@
             $tmp_fecha_archivo2 = "";
             $estilo_imagen = "";
             $gif_aviso = "";
+            $texto_archivo_mes = "";
+            $enlace_estilo_nuevo = "";
             $ruta_dato = $ruta."/".$dato;
             if( strpos( $ruta, "//" ) !== false ) $ruta = str_replace( "//", "/", $ruta );
             if( strpos( $ruta_dato, "//" ) !== false ) $ruta_dato = str_replace( "//", "/", $ruta_dato );
@@ -148,22 +158,37 @@
             {
                 $tmp_fecha_archivo1 = date( "F d Y H:i:s.", filectime( $ruta_dato ) );
                 $tmp_fecha_archivo2 = date( "Y-n-d", filectime( $ruta_dato ) );
-                                
-                $estilo_imagen =  $this->comparar_fechas( $tmp_fecha_archivo2 ) == "" ? "imagen-icono-normal": "imagen-icono-destacado";
-                $gif_aviso =  $this->comparar_fechas( $tmp_fecha_archivo2 ) == "" ? "": "<img src='img/gif-aviso.gif'>";
+            
+                $texto_archivo_mes = $this->comparar_fechas( $tmp_fecha_archivo2 );
+                              
+                if( $texto_archivo_mes == "" )
+                {
+                    //$estilo_imagen =  $this->comparar_fechas( $tmp_fecha_archivo2 ) == "" ? "imagen-icono-normal": "imagen-icono-destacado";
+                    //$gif_aviso =  $this->comparar_fechas( $tmp_fecha_archivo2 ) == "" ? "": "<img src='img/gif-aviso.gif'>";
+                    //$enlace_estilo_nuevo = $this->comparar_fechas( $tmp_fecha_archivo2 ) == "" ? "": " class='text-success' ";
+                    
+                    $estilo_imagen = "imagen-icono-normal";
+                    
+                }else{
+                        $gif_aviso = "<img src='img/gif-aviso.gif'>";
+                        $estilo_imagen = "imagen-icono-destacado";
+                        $enlace_estilo_nuevo = " class='text-success' ";
+                    }
                 
                 //Es archivo.
                 $salida = ""; //"<table border='1px'><tr>";
                 //$salida .= "<td>";
                 //Para resaltar los archivos del mes, se usarán diferentes estilos en el tamaño del ícono del archivo.
                 $salida .= "<img class='$estilo_imagen' src='img/".$this->retornar_tipo_archivo( $dato )."'>".$gif_aviso." ";
-                $salida .= "<a href='".$ruta_dato."'  onclick=\"trackOutboundLink( '".$ruta_dato."' ); return false;\"  target='_blank'>".$dato."</a> ";
+                $salida .= "<a href='".$ruta_dato."' $enlace_estilo_nuevo onclick=\"trackOutboundLink( '".$ruta_dato."' ); return false;\"  target='_blank'>".$dato."</a> ";
                 //$salida .= "</td>";
                 //$salida .= "<td>";
                 $salida .= "&nbsp;&nbsp;&nbsp;&nbsp;".$tmp_fecha_archivo1;
-                $salida .= "&nbsp;&nbsp;<strong>".$this->convertir_peso( $ruta_dato )."</strong> ".$this->comparar_fechas( $tmp_fecha_archivo2 );
+                $salida .= "&nbsp;&nbsp;<strong>".$this->convertir_peso( $ruta_dato )."</strong> <span class='badge badge-secondary'>".$texto_archivo_mes."</span>";
                 //$salida .= "<td>";
                 //$salida .= "</tr></table>";
+                
+                $this->g_total_archivos ++;
                 
                 //Si el archivo no existe, lo registramos en la BD.
                 //Al principio el índice indicaría si se registraría o no, pero luego tocó hacer esta comprobación
