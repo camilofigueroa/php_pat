@@ -68,7 +68,7 @@
         <hr>
                         
         <br><br><br><br><br>
-                        
+                                        
         <footer class="footer">
             <p><?= $obj_operaciones->traer_texto_footer() ?></p>
         </footer>

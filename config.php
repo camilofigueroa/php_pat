@@ -43,4 +43,50 @@
         <p><a href="#" class="text-dark">Dark link</a></p>
         <p><a href="#" class="text-muted">Muted link</a></p>
         <p><a href="#" class="text-white bg-dark">White link</a></p>
+        
+        <div class="p-3 mb-2 bg-primary text-white">.bg-primary</div>
+        <div class="p-3 mb-2 bg-secondary text-white">.bg-secondary</div>
+        <div class="p-3 mb-2 bg-success text-white">.bg-success</div>
+        <div class="p-3 mb-2 bg-danger text-white">.bg-danger</div>
+        <div class="p-3 mb-2 bg-warning text-dark">.bg-warning</div>
+        <div class="p-3 mb-2 bg-info text-white">.bg-info</div>
+        <div class="p-3 mb-2 bg-light text-dark">.bg-light</div>
+        <div class="p-3 mb-2 bg-dark text-white">.bg-dark</div>
+        <div class="p-3 mb-2 bg-white text-dark">.bg-white</div>
+        
+        <div class="p-3 mb-2 bg-gradient-primary text-white">.bg-gradient-primary</div>
+        <div class="p-3 mb-2 bg-gradient-secondary text-white">.bg-gradient-secondary</div>
+        <div class="p-3 mb-2 bg-gradient-success text-white">.bg-gradient-success</div>
+        <div class="p-3 mb-2 bg-gradient-danger text-white">.bg-gradient-danger</div>
+        <div class="p-3 mb-2 bg-gradient-warning text-dark">.bg-gradient-warning</div>
+        <div class="p-3 mb-2 bg-gradient-info text-white">.bg-gradient-info</div>
+        <div class="p-3 mb-2 bg-gradient-light text-dark">.bg-gradient-light</div>
+        <div class="p-3 mb-2 bg-gradient-dark text-white">.bg-gradient-dark</div>
+        
+        <span class="badge badge-primary">Primary</span>
+        <span class="badge badge-secondary">Secondary</span>
+        <span class="badge badge-success">Success</span>
+        <span class="badge badge-danger">Danger</span>
+        <span class="badge badge-warning">Warning</span>
+        <span class="badge badge-info">Info</span>
+        <span class="badge badge-light">Light</span>
+        <span class="badge badge-dark">Dark</span>
+        
+        <span class="badge badge-pill badge-primary">Primary</span>
+        <span class="badge badge-pill badge-secondary">Secondary</span>
+        <span class="badge badge-pill badge-success">Success</span>
+        <span class="badge badge-pill badge-danger">Danger</span>
+        <span class="badge badge-pill badge-warning">Warning</span>
+        <span class="badge badge-pill badge-info">Info</span>
+        <span class="badge badge-pill badge-light">Light</span>
+        <span class="badge badge-pill badge-dark">Dark</span>
+        
+        <a href="#" class="badge badge-primary">Primary</a>
+        <a href="#" class="badge badge-secondary">Secondary</a>
+        <a href="#" class="badge badge-success">Success</a>
+        <a href="#" class="badge badge-danger">Danger</a>
+        <a href="#" class="badge badge-warning">Warning</a>
+        <a href="#" class="badge badge-info">Info</a>
+        <a href="#" class="badge badge-light">Light</a>
+        <a href="#" class="badge badge-dark">Dark</a>
     */

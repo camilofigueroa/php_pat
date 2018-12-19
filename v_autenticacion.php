@@ -41,25 +41,38 @@
         <br>
         
         <div class="container">
+            
+            <div class="contenedor-general-objetos">
                                     
-            <form action="c_autenticar.php" method="post" class="col s12">
-                
-                <select name="nivel">
+                <form action="c_autenticar.php" method="post" class="col s12">
                     
-                    <!-- Aquí se ajustan los niveles de carpetas, pero deben estar acordes y almacenados en la base de datos. -->
-                    <option value="-1">Please select.</option>
-                    <option value="10">Nivel 10</option>
-                    <option value="2">Nivel 2</option>
-                    <option value="1">Nivel 1</option>
+                    <div class="form-group">
                     
-                </select>                            
-                
-                <input type="password" name="clave" maxlength=50>
-                <input type="submit" value="Entrar">
-                <br>
-                <br> 
-                
-            </form>
+                        <select name="nivel" class="form-control form-control-lg">
+                            
+                            <!-- Aquí se ajustan los niveles de carpetas, pero deben estar acordes y almacenados en la base de datos. -->
+                            <option value="-1">Please select.</option>
+                            <option value="10">Level - nivel: 10</option>
+                            <option value="2">Level - nivel: 2</option>
+                            <option value="1">Level - nivel: 1</option>
+                            
+                        </select>                            
+                        
+                        <br>
+                        <!-- <label for="clave-formulario">Your password - tu contraseña: </label> -->
+                        <input type="password" id="clave-formulario" class="form-control" name="clave" maxlength=50 placeholder="Your password - tu contraseña." required>
+                        
+                        <br>
+                        
+                        <input type="submit" value="Entrar">
+                        <br>
+                        <br>
+                    
+                    </div> <!-- class="form-group" Bootstrap -->
+                    
+                </form>
+            
+            </div>
                
         </div> <!-- container -->
                         
